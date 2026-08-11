@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>英検5級 2021年度第2回 リスニング Part 2 - Do you understand the questions?</title>
+    <script src="auth.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy-dark: #1b2a4a;
+            --navy-light: #2c3e60;
+            --gold: #d4af37;
+            --gold-light: #f4e8c1;
+            --gold-dark: #aa8c2c;
+            --black: #222222;
+            --gray-bg: #f5f6f8;
+            --gray-border: #d0d5dd;
+            --white: #ffffff;
+            --error-red: #d32f2f;
+            --success-green: #2e7d32;
+            --base-font: 'Andika', "Hiragino Maru Gothic ProN", "Hiragino Maru Gothic Pro", "Yu Gothic", "Meiryo", sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--base-font);
+            background-color: var(--gray-bg);
+            color: var(--black);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--navy-dark);
+            color: var(--white);
+            width: 100%;
+            padding: 18px 15px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            border-bottom: 4px solid var(--gold);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.3rem;
+            letter-spacing: 0.5px;
+        }
+
+        .container {
+            max-width: 650px;
+            width: 92%;
+            margin: 20px 0;
+            background: var(--white);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            text-align: center;
+            border: 3px solid var(--gold);
+        }
+
+        .menu-grid { 
+            display: grid; 
+            grid-template-columns: 1fr; 
+            gap: 18px; 
+            margin-top: 20px; 
+        }
+
+        .menu-btn {
+            background: var(--white);
+            border: 3px solid var(--navy-dark);
+            color: var(--navy-dark);
+            padding: 22px;
+            border-radius: 16px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .menu-btn:hover { 
+            background: var(--gold-light); 
+            border-color: var(--gold-dark);
+            transform: translateY(-2px); 
+        }
+
+        .menu-btn span { 
+            display: block; 
+            font-size: 0.9rem; 
+            color: #555; 
+            margin-top: 8px; 
+            font-weight: normal;
+        }
+
+        .progress-bar { 
+            font-size: 1.1rem; 
+            color: var(--navy-dark); 
+            margin-bottom: 15px; 
+            font-weight: bold; 
+        }
+
+        .audio-area {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0 25px 0;
+            min-height: 140px;
+            background-color: var(--gray-bg);
+            padding: 20px;
+            border-radius: 16px;
+            border: 2px dashed var(--navy-light);
+        }
+
+        .speaker-btn {
+            background: var(--navy-dark);
+            border: 3px solid var(--gold);
+            color: var(--gold);
+            font-size: 2.5rem;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 0 var(--navy-light);
+            transition: all 0.1s ease;
+        }
+
+        .speaker-btn:active { 
+            transform: translateY(4px); 
+            box-shadow: 0 1px 0 var(--navy-light); 
+        }
+
+        .audio-label {
+            font-size: 0.95rem;
+            color: #555;
+            font-weight: bold;
+        }
+
+        .revealed-word {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--navy-dark);
+            margin-top: 10px;
+            padding: 8px 16px;
+            background: #eef2f7;
+            border-radius: 8px;
+            border-left: 5px solid var(--gold);
+            display: none;
+            word-break: break-word;
+        }
+
+        .choices-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 12px; 
+        }
+
+        @media (max-width: 480px) {
+            .choices-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .choice-btn-base {
+            background: var(--white);
+            border: 2px solid var(--navy-dark);
+            border-radius: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--navy-dark);
+            font-family: var(--base-font);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px 10px;
+            line-height: 1.3;
+            min-height: 80px;
+            font-size: 1.15rem;
+        }
+
+        .choice-btn-base:hover { 
+            background-color: var(--gold-light); 
+            border-color: var(--gold-dark);
+        }
+
+        .choice-btn-base.wrong { 
+            background-color: #ffebee; 
+            border-color: var(--error-red); 
+            color: var(--error-red); 
+            animation: shake 0.3s; 
+        }
+
+        @keyframes shake { 
+            0%, 100% {transform: translateX(0);} 
+            25% {transform: translateX(-5px);} 
+            75% {transform: translateX(5px);} 
+        }
+
+        #quiz-screen, #result-screen { display: none; }
+        .score-num { font-size: 3.5rem; color: var(--navy-dark); font-weight: 700; }
+        
+        .mistake-list { 
+            text-align: left; 
+            background: var(--gray-bg); 
+            padding: 15px; 
+            border-radius: 12px; 
+            margin-top: 15px; 
+            border: 1px solid var(--gray-border); 
+        }
+        
+        .mistake-item { 
+            display: flex; 
+            flex-direction: column;
+            gap: 4px;
+            padding: 10px 0; 
+            border-bottom: 1px solid #e0e0e0; 
+        }
+
+        .mistake-item:last-child {
+            border-bottom: none;
+        }
+
+        .mistake-eng {
+            font-weight: bold;
+            color: var(--navy-dark);
+        }
+
+        .mistake-jp {
+            color: #444;
+            font-size: 0.95rem;
+        }
+
+        .action-btn { 
+            background-color: var(--navy-dark); 
+            color: white; 
+            border: 2px solid var(--gold); 
+            padding: 15px; 
+            border-radius: 30px; 
+            font-size: 1.1rem; 
+            font-weight: bold; 
+            cursor: pointer; 
+            margin-top: 12px; 
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background-color: var(--navy-light);
+        }
+
+        .action-btn-secondary {
+            background-color: #607d8b;
+            border: none;
+        }
+
+        .next-btn {
+            background-color: var(--gold-dark);
+            color: var(--white);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            display: none;
+            width: 100%;
+        }
+
+        .next-btn:hover {
+            background-color: var(--gold);
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1 id="main-title">英検5級 2021年度第2回 リスニング Part 2<br>Do you understand the questions?</h1>
+</header>
+
+<div class="container" id="menu-screen">
+    <h2 style="margin-bottom:10px; color: var(--navy-dark);">学習をはじめよう！</h2>
+    <p style="color: #555; font-size: 0.95rem; margin-bottom: 20px;">
+        音声ボタンを押して英語を聞き、正しい日本語訳を選ぼう！
+    </p>
+    <div class="menu-grid">
+        <button class="menu-btn" onclick="startQuiz()">
+            Activity：1文チェック（全15問）
+            <span>リスニング文を1文ずつ正確に理解しよう！</span>
+        </button>
+    </div>
+</div>
+
+<div class="container" id="quiz-screen">
+    <div class="progress-bar" id="progress">1 / 15</div>
+    
+    <div class="audio-area">
+        <button class="speaker-btn" id="speaker-btn" onclick="speakCurrentWord()">🔊</button>
+        <div class="audio-label">ボタンを押して英語を聞こう！</div>
+        <div class="revealed-word" id="revealed-word"></div>
+    </div>
+
+    <div class="choices-grid" id="choices-container"></div>
+    
+    <div id="feedback" style="margin-top:15px; height: 1.2em; font-weight: bold; font-size: 1.3rem;"></div>
+    <button class="next-btn" id="next-btn" onclick="nextQuestion()">次の問題へ ▶</button>
+</div>
+
+<div class="container" id="result-screen">
+    <h2 id="result-title" style="color: var(--navy-dark);">Activity 終了！</h2>
+    <div style="font-size: 1.2rem;">一発正解数：<span class="score-num" id="final-score">0</span> / <span id="total-questions">0</span></div>
+    
+    <div id="mistake-container" style="display:none;">
+        <h3 style="color: var(--navy-dark); margin-top:25px;">もう一度 かくにん！</h3>
+        <div class="mistake-list" id="mistake-list"></div>
+    </div>
+    
+    <button class="action-btn" onclick="sendEmail()">Tamaki先生に報告する</button>
+    <button class="action-btn action-btn-secondary" onclick="location.reload()">メニューに戻る</button>
+</div>
+
+<script>
+let quizQueue = [];
+let currentIndex = 0;
+let firstTryCorrectCount = 0;
+let isFirstTry = true;
+let mistakes = [];
+let isAnswered = false;
+
+if ('speechSynthesis' in window) {
+    window.speechSynthesis.onvoiceschanged = function() {
+        window.speechSynthesis.getVoices();
+    };
+}
+
+// 漏れていた「I go skiing every December.」を追加した全15問
+const scriptData = [
+    { w: "What do you do on weekends, Lucy?", a: "ルーシー、週末は何をしますか？", c: ["ルーシー、週末はどこに行きますか？"] },
+    { w: "I play softball at the park.", a: "公園でソフトボールをします。", c: ["公園でサッカーをします。"] },
+    { w: "What does Lucy do on weekends?", a: "ルーシーは週末に何をしますか？", c: ["ルーシーはいつソフトボールをしますか？"] },
+    { w: "I go skiing every December.", a: "私は毎年12月にスキーに行きます。", c: ["私は毎年1月にスキーに行きます。"] },
+    { w: "Really? I sometimes go skiing in January or February.", a: "本当ですか？ 私は時々1月か2月にスキーに行きます。", c: ["本当ですか？ 私は毎年12月にスキーに行きます。"] },
+    { w: "When does the man go skiing?", a: "男性はいつスキーに行きますか？", c: ["女性はいつスキーに行きますか？"] },
+    { w: "Is Mark in his bedroom?", a: "マークは自分の寝室にいますか？", c: ["マークは学校にいますか？"] },
+    { w: "Yes, and Jenny is at school.", a: "はい、そしてジェニーは学校にいます。", c: ["はい、そしてジェニーは自分の部屋にいます。"] },
+    { w: "Where is Mark?", a: "マークはどこにいますか？", c: ["ジェニーはどこにいますか？"] },
+    { w: "The movie starts at 7:30.", a: "映画は7時30分に始まります。", c: ["映画は6時に始まります。"] },
+    { w: "Let's eat dinner at six.", a: "6時に夕食を食べましょう。", c: ["7時30分に夕食を食べましょう。"] },
+    { w: "What time does the movie start?", a: "映画は何時に始まりますか？", c: ["何時に夕食を食べますか？"] },
+    { w: "How much is orange juice?", a: "オレンジジュースはいくらですか？", c: ["リンゴジュースはいくらですか？"] },
+    { w: "200 yen. Apple juice is only 150 yen.", a: "200円です。リンゴジュースはたったの150円です。", c: ["150円です。オレンジジュースはたったの200円です。"] },
+    { w: "How much is apple juice?", a: "リンゴジュースはいくらですか？", c: ["オレンジジュースはいくらですか？"] }
+];
+
+function startQuiz() {
+    currentIndex = 0;
+    firstTryCorrectCount = 0;
+    mistakes = [];
+    quizQueue = [...scriptData];
+    
+    document.getElementById('menu-screen').style.display = 'none';
+    document.getElementById('quiz-screen').style.display = 'block';
+    
+    loadQuestion();
+}
+
+function loadQuestion() {
+    const current = quizQueue[currentIndex];
+    document.getElementById('progress').textContent = `${currentIndex + 1} / ${quizQueue.length}`;
+    
+    const revealedWord = document.getElementById('revealed-word');
+    revealedWord.style.display = 'none';
+    revealedWord.textContent = current.w;
+    
+    document.getElementById('feedback').textContent = "";
+    document.getElementById('next-btn').style.display = "none";
+    
+    isFirstTry = true;
+    isAnswered = false;
+
+    const container = document.getElementById('choices-container');
+    container.innerHTML = '';
+
+    const choices = [current.a, ...current.c].sort(() => Math.random() - 0.5);
+    choices.forEach(choice => {
+        const btn = document.createElement('button');
+        btn.className = 'choice-btn-base';
+        btn.innerHTML = choice;
+        btn.onclick = () => checkAnswer(choice, current.a, btn);
+        container.appendChild(btn);
+    });
+
+    setTimeout(() => {
+        speakCurrentWord();
+    }, 300);
+}
+
+function checkAnswer(selected, correct, btn) {
+    if (isAnswered && selected !== correct) return;
+
+    if (selected === correct) {
+        if (isFirstTry) firstTryCorrectCount++;
+        
+        document.getElementById('feedback').style.color = "var(--success-green)";
+        document.getElementById('feedback').textContent = "Excellent! ✨";
+        
+        document.getElementById('revealed-word').style.display = 'block';
+        isAnswered = true;
+
+        const btns = document.querySelectorAll('.choice-btn-base');
+        btns.forEach(b => b.onclick = null);
+
+        document.getElementById('next-btn').style.display = "block";
+
+    } else {
+        if (isFirstTry) {
+            mistakes.push({w: quizQueue[currentIndex].w, a: quizQueue[currentIndex].a});
+            isFirstTry = false;
+        }
+        btn.classList.add('wrong');
+        document.getElementById('feedback').style.color = "var(--error-red)";
+        document.getElementById('feedback').textContent = "Try again!";
+    }
+}
+
+function nextQuestion() {
+    currentIndex++;
+    if (currentIndex < quizQueue.length) {
+        loadQuestion();
+    } else {
+        showResult();
+    }
+}
+
+function showResult() {
+    document.getElementById('quiz-screen').style.display = 'none';
+    document.getElementById('result-screen').style.display = 'block';
+    
+    document.getElementById('result-title').textContent = `Activity 終了！`;
+    document.getElementById('final-score').textContent = firstTryCorrectCount;
+    document.getElementById('total-questions').textContent = quizQueue.length;
+    
+    if (mistakes.length > 0) {
+        document.getElementById('mistake-container').style.display = 'block';
+        document.getElementById('mistake-list').innerHTML = mistakes.map(m => `
+            <div class="mistake-item">
+                <span class="mistake-eng">🔊 ${m.w}</span>
+                <span class="mistake-jp">意味：${m.a}</span>
+            </div>
+        `).join('');
+    } else {
+        document.getElementById('mistake-container').style.display = 'none';
+    }
+}
+
+function sendEmail() {
+    const teacherEmail = "tamaki@eigostudio-stepforward.com";
+    const subject = encodeURIComponent(`英検5級 2021-2 リスニング Part 2 (Do you understand the questions?) 学習結果`);
+    
+    const cleanMistakes = mistakes.map(m => `・${m.w} : ${m.a}`).join('\n');
+    let mistakeText = mistakes.length > 0 ? '\n\n■要復習:\n' + cleanMistakes : '\n\n満点でした！完璧です！';
+    
+    const body = encodeURIComponent(`Tamaki先生へ\n\n「英検5級 リスニング Part 2 (Do you understand the questions?)」のトレーニングを完了しました！\n\n結果: ${quizQueue.length}問中 ${firstTryCorrectCount} 問を一発正解。${mistakeText}`);
+    
+    window.location.href = `mailto:${teacherEmail}?subject=${subject}&body=${body}`;
+}
+
+function speakCurrentWord() {
+    const txt = quizQueue[currentIndex].w;
+    window.speechSynthesis.cancel();
+    let u = new SpeechSynthesisUtterance(txt);
+    u.lang = "en-US"; 
+    u.rate = 0.65; // 英検5級に適したゆっくりめの速度
+
+    const voices = window.speechSynthesis.getVoices();
+    const fv = voices.find(v => v.name.includes("Google US English") || v.name.includes("Female") || v.name.includes("Zira"));
+    if (fv) u.voice = fv;
+    
+    window.speechSynthesis.speak(u);
+}
+</script>
+</body>
+</html>
